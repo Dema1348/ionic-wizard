@@ -39,9 +39,25 @@ angular.module('ionic.wizard', [])
                     initialSlide: 0,
                     autoHeight: true,
                     onInit: function(swiper){
-                        scope.swiper = swiper;        
+                         scope.swiper = swiper;        
                     }
                 });
+
+                scope.$on("wizard:UpdateScroll",function  () {
+                    for (var i = 0, x = $('ion-content').length ; i < x ; i++) {
+                  $('ion-content')[i].addEventListener('focus', function (e) {
+                            var focusIndex = $(e.target).parents('.swiper-slide').index();
+                            //Reset scrollLeft set by browser on focus
+                            $('.swiper-container')[0].scrollLeft = 0;
+                            setTimeout(function(){
+                                $('.swiper-container')[0].scrollLeft = 0;
+                            },0);
+                            //Slide to focused slide
+                            scope.swiper.slideTo(focusIndex);
+                        }, true);
+                }
+                })
+               
 
                 scope.$on("wizard:Previous", function() {
                     scope.swiper.slidePrev(true);
